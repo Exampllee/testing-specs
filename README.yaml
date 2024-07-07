@@ -1,0 +1,87 @@
+openapi: 3.0.0
+info:
+  title: Умный дом Аудит API
+  version: 1.0.0
+  description: API для обработки событий аудита в умном доме
+servers:
+  - url: http://example.com/api/v1
+paths:
+  /events:
+    post:
+      summary: Создание нового события аудита
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                timestamp:
+                  type: string
+                  format: date-time
+                description:
+                  type: string
+                user_id:
+                  type: string
+                device_id:
+                  type: string
+                configuration_parameter_id:
+                  type: string
+                audit_status:
+                  type: string
+                  enum: [successful, unsuccessful]
+                comments:
+                  type: string
+              required:
+                - id
+                - timestamp
+                - description
+                - user_id
+                - device_id
+                - configuration_parameter_id
+                - audit_status
+      responses:
+        '201':
+          description: Событие успешно создано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Неверный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+        description:
+          type: string
+        user_id:
+          type: string
+        device_id:
+          type: string
+        configuration_parameter_id:
+          type: string
+        audit_status:
+          type: string
+          enum: [successful, unsuccessful]
+        comments:
+          type: string
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
